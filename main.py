@@ -7,9 +7,9 @@ import cv2 as cv
 
 #Tracking variables and constants.
 running : bool = False
-FRAME_RATE : int = 30
+FRAME_RATE : int = 13
 DELAY_IN_MS : int = floor(1000/FRAME_RATE)
-TEMP_FILENAME = "temp.png"
+TEMP_FILENAME : str = "temp.png"
 
 
 #Safe to call more than once.
@@ -31,7 +31,7 @@ def stop():
         pass
 
 
-camera = cv.VideoCapture(0)
+camera : cv.VideoCapture = cv.VideoCapture(0)
 #Start the program
 start()
 while running:

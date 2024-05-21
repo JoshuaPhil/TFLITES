@@ -12,6 +12,24 @@ DELAY_IN_MS : int = floor(1000/FRAME_RATE)
 TEMP_FILENAME : str = "temp.png"
 
 
+interpreter_1 = tf.lite.Interpreter(model_path="1.tflite")
+interpreter_2 = tf.lite.Interpreter(model_path="2.tflite")
+interpreter_1.allocate_tensors()
+
+input_details_1 = interpreter_1.get_input_details()
+output_details_1 = interpreter_1.get_output_details()
+
+
+
+interpreter_2.allocate_tensors()
+
+input_details_2 = interpreter_2.get_input_details()
+output_details_2 = interpreter_2.get_output_details()
+
+print(output_details_1)
+print(input_details_2)
+
+
 #Safe to call more than once.
 #Starts the program.
 def start():
@@ -21,14 +39,15 @@ def start():
     else:
         pass
 
-#Safe to call more than once.
+#Safe to call more than once. 
 #Stops the program.
 def stop():
     global running
     if running:
         running = False
     else:
-        pass
+        pass 
+
 
 
 camera : cv.VideoCapture = cv.VideoCapture(0)

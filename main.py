@@ -19,12 +19,9 @@ interpreter_1.allocate_tensors()
 input_details_1 = interpreter_1.get_input_details()
 output_details_1 = interpreter_1.get_output_details()
 
-
-
-interpreter_2.allocate_tensors()
-
 input_details_2 = interpreter_2.get_input_details()
 output_details_2 = interpreter_2.get_output_details()
+interpreter_2.allocate_tensors()
 
 print(output_details_1)
 print(input_details_2)

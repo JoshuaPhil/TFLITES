@@ -13,7 +13,6 @@ FRAME_RATE : int = 13
 DELAY_IN_MS : int = floor(1000/FRAME_RATE)
 TEMP_FILENAME = "temp.png"
 
-
 #Safe to call twice.
 #Starts the program.
 def start():
@@ -29,7 +28,7 @@ def stop():
     global running
     if running:
         running = False
-    else:
+    else: 
         pass
 
 def write_to_file(txt):
@@ -51,11 +50,14 @@ while running:
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         cv.imwrite(TEMP_FILENAME, gray)
 
-        text = pytesseract.image_to_string(Image.open(TEMP_FILENAME))
+        image = Image.open(TEMP_FILENAME)
+        text = pytesseract.image_to_string(image)
+        image.close()
         os.remove(TEMP_FILENAME)
 
         print("Interpreted Text:", text)
         write_to_file(text)
+
 
         cv.imshow("Camera Feed", frame)
         cv.imshow("Output", gray)

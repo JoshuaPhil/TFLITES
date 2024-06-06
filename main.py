@@ -11,10 +11,14 @@ FRAME_RATE : int = 13
 DELAY_IN_MS : int = floor(1000/FRAME_RATE)
 TEMP_FILENAME : str = "temp.png"
 
+Number = int | float
+
+running : Number = 0
 
 interpreter_1 = tf.lite.Interpreter(model_path="1.tflite")
 interpreter_2 = tf.lite.Interpreter(model_path="2.tflite")
 interpreter_1.allocate_tensors()
+
 
 input_details_1 = interpreter_1.get_input_details()
 output_details_1 = interpreter_1.get_output_details()

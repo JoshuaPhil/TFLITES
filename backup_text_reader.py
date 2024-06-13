@@ -44,6 +44,7 @@ while running:
     frame = None
  
     if camera.isOpened():
+        
         rval, frame = camera.read()
         assert rval==True, "Camera is not plugged in"
     
@@ -58,11 +59,9 @@ while running:
         print("Interpreted Text:", text)
         write_to_file(text)
 
-
         cv.imshow("Camera Feed", frame)
         cv.imshow("Output", gray)
 
-    
     #Get the value of the key that is pressed.
     keyValue : int = cv.waitKey(DELAY_IN_MS)
     

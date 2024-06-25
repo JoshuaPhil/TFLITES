@@ -5,31 +5,60 @@ import numpy as np
 from math import floor
 import cv2 as cv
 
+Number = int | float
+
 #Tracking variables and constants.
 running : bool = False
-FRAME_RATE : int = 13
-DELAY_IN_MS : int = floor(1000/FRAME_RATE)
+FRAME_RATE : Number = 13
+DELAY_IN_MS : Number = floor(1000/FRAME_RATE)
 TEMP_FILENAME : str = "temp.png"
 
-Number = int | float
+
 
 running : Number = 0
 
-interpreter_1 = tf.lite.Interpreter(model_path="1.tflite")
-interpreter_2 = tf.lite.Interpreter(model_path="2.tflite")
-interpreter_1.allocate_tensors()
+text_detection = tf.lite.Interpreter(model_path="1.tflite")
+text_detection.allocate_tensors()
+
+text_detection_input_details = text_detection.get_input_details()
+text_detection_output_details = text_detection.get_output_details()
 
 
-input_details_1 = interpreter_1.get_input_details()
-output_details_1 = interpreter_1.get_output_details()
+i_data = cv.imread("temp.png")
 
-input_details_2 = interpreter_2.get_input_details()
-output_details_2 = interpreter_2.get_output_details()
-interpreter_2.allocate_tensors()
 
-print(output_details_1)
-print(input_details_2)
+im = cv.cvtColor(i_data, cv.COLOR_BGR2RGB)
 
+model_size = (320, 320)
+resized = cv.resize(im, model_size, interpolation=cv.INTER_CUBIC)
+resized = resized.astype(np.float32)
+resized /= 255
+
+i_data = np.expand_dims(resized, 0)
+
+text_detection.set_tensor(text_detection_input_details[0]['index'], i_data)
+
+text_detection.invoke()
+ 
+text_detection_output = text_detection.get_tensor(text_detection_output_details[0]['index'])
+
+print(text_detection_output)
+
+
+
+cv.imshow("output", text_detection_output)
+
+text_recognition = tf.lite.Interpreter(model_path="2.tflite")     
+text_recognition.allocate_tensors()
+
+text_recognition_input_details = text_recognition.get_input_details() 
+text_recognition_output_details = text_recognition.get_output_details()
+
+text_recognition.set_tensor(text_recognition_input_details[0]['index'], text_detection_output)
+
+text_recognition.invoke()
+
+text_recognition_output = text_recognition.get_tensor(text_recognition_output_details[0]['index'])
 
 #Safe to call more than once.
 #Starts the program.
@@ -44,7 +73,7 @@ def start():
 #Stops the program.
 def stop():
     global running
-    if running:
+    if running: 
         running = False
     else:
         pass 
@@ -53,7 +82,6 @@ def stop():
 
 camera : cv.VideoCapture = cv.VideoCapture(0)
 #Start the program
-start()
 while running:
     frame = None
  
@@ -61,12 +89,12 @@ while running:
         rval, frame = camera.read()
         assert rval==True, "Camera is not plugged in."
     
-    #Get the value of the key that is pressed.
-    keyValue : int = cv.waitKey(DELAY_IN_MS)
+    #Get the value of the key that is pressed. 
+    keyValue : Number = cv.waitKey(DELAY_IN_MS)
     
     #Determine if the escape key is pressed.
     if keyValue == 27:
         #stop the program
         stop()
 camera.release()
-cv.destroyAllWindows()
+cv.destroyAllWindows() 

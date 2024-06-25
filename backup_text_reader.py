@@ -17,7 +17,7 @@ TEMP_FILENAME = "temp.png"
 #Starts the program.
 def start():
     global running
-    if not running:
+    if not running: 
         running = True
     else:
         pass
@@ -26,10 +26,11 @@ def start():
 #Stops the program.
 def stop():
     global running
-    if running:
+    if running:                                                        
         running = False
     else: 
         pass
+    
 
 def write_to_file(txt):
     file = open("found_text.txt", "a")
@@ -41,8 +42,8 @@ camera = cv.VideoCapture(0)
 #Start the program
 start()
 while running:
-    frame = None
- 
+    frame = None 
+  
     if camera.isOpened():
         
         rval, frame = camera.read()

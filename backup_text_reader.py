@@ -11,7 +11,7 @@ pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesse
 running : bool = False
 FRAME_RATE : int = 13
 DELAY_IN_MS : int = floor(1000/FRAME_RATE)
-TEMP_FILENAME = "temp.png"
+TEMP_FILENAME = "temp.png" 
 
 #Safe to call twice.
 #Starts the program.

@@ -13,8 +13,6 @@ FRAME_RATE : Number = 13
 DELAY_IN_MS : Number = floor(1000/FRAME_RATE)
 TEMP_FILENAME : str = "temp.png"
 
-
-
 running : Number = 0
 
 text_detection = tf.lite.Interpreter(model_path="1.tflite")
@@ -36,34 +34,38 @@ resized /= 255
 
 i_data = np.expand_dims(resized, 0)
 
+
 text_detection.set_tensor(text_detection_input_details[0]['index'], i_data)
 
 text_detection.invoke()
  
 text_detection_output = text_detection.get_tensor(text_detection_output_details[0]['index'])
 
-print(text_detection_output)
-
-
-
-cv.imshow("output", text_detection_output)
-
 text_recognition = tf.lite.Interpreter(model_path="2.tflite")     
 text_recognition.allocate_tensors()
+
 
 text_recognition_input_details = text_recognition.get_input_details() 
 text_recognition_output_details = text_recognition.get_output_details()
 
-text_recognition.set_tensor(text_recognition_input_details[0]['index'], text_detection_output)
+print(text_recognition_input_details)
+
+model_size = (31,200)
+resize = cv.resize(text_detection_output, model_size, interpolation=cv.INTER_CUBIC)
+
+o_data = np.expand_dims(resize, 0)
+
+text_recognition.set_tensor(text_recognition_input_details[0]['index'], o_data)
 
 text_recognition.invoke()
 
 text_recognition_output = text_recognition.get_tensor(text_recognition_output_details[0]['index'])
 
+
 #Safe to call more than once.
 #Starts the program.
 def start():
-    global running
+    global running 
     if not running:
         running = True
     else:

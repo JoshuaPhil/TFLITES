@@ -10,7 +10,7 @@ pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesse
 #Tracking variables and constants.
 running : bool = False
 FRAME_RATE : int = 13
-DELAY_IN_MS : int = floor(1000/FRAME_RATE)
+DELAY_IN_MS : int = int(1000/FRAME_RATE)
 TEMP_FILENAME = "temp.png" 
 
 #Safe to call twice.
